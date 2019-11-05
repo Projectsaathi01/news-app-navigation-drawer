@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsapp.R;
 import com.example.newsapp.models.Article;
 import com.example.newsapp.models.ArticleAdapter;
+import com.example.newsapp.models.Movie;
+import com.example.newsapp.models.MovieAdapter;
 
 import java.util.List;
 
@@ -25,33 +27,31 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private RecyclerView recyclerView;
     private ArticleAdapter articleAdapter;
+    private MovieAdapter movieAdapter;
     private List<Article> articles;
-    private HomeViewModel model;
+    private List<Movie> movies;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        model = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-        model.getArticles().observe(this, new Observer<List<Article>>() {
+        homeViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
-            public void onChanged(List<Article> articles) {
+            public void onChanged(List<Movie> movies) {
 
-                articleAdapter = new ArticleAdapter(getActivity(), articles);
+                movieAdapter = new MovieAdapter(movies, getContext());
 
-                recyclerView.setAdapter(articleAdapter);
-
-                articleAdapter.notifyDataSetChanged();
-
+                recyclerView.setAdapter(movieAdapter);
             }
         });
 
